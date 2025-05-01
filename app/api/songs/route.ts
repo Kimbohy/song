@@ -3,45 +3,57 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
-    const search = searchParams.get("search") || "";
-    const sort = searchParams.get("sort") || "stream";
-    const order = searchParams.get("order") || "desc";
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "50");
+    const urlParams = request.nextUrl.searchParams;
+    const search = urlParams.get("search") || "";
+    const sort = urlParams.get("sort") || "stream";
+    const order =
+      urlParams.get("order")?.toUpperCase() === "ASC" ? "ASC" : "DESC";
+    const page = parseInt(urlParams.get("page") || "1");
+    const limit = parseInt(urlParams.get("limit") || "10"); // Changed default to 10 to match frontend
     const offset = (page - 1) * limit;
 
     const conn = await createConnection();
 
-    // Build the WHERE clause for search
+    // Validate sort column to prevent SQL injection
+    const allowedSortColumns = [
+      "stream",
+      "views",
+      "track",
+      "artist",
+      "album",
+      "likes",
+      "comments",
+    ];
+    const safeSort = allowedSortColumns.includes(sort) ? sort : "stream";
+
+    // Build the WHERE clause and parameters
     const whereClause = search
-      ? "WHERE artist LIKE ? OR track LIKE ? OR album LIKE ?"
+      ? "WHERE artist LIKE :search OR track LIKE :search OR album LIKE :search"
       : "";
-    const searchPattern = `%${search}%`;
-    const params = search ? [searchPattern, searchPattern, searchPattern] : [];
+    const params = {
+      limit,
+      offset,
+      ...(search && { search: `%${search}%` }),
+    };
 
     // Get total count for pagination
-    const [countResult] = await conn.execute(
+    const [countResult] = await conn.query(
       `SELECT COUNT(*) as count FROM songs ${whereClause}`,
       params
     );
     const totalCount = (countResult as any)[0].count;
 
     // Get songs with pagination and sorting
-    const [songs] = await conn.execute(
-      `SELECT * FROM songs 
+    const [songs] = await conn.query(
+      `SELECT 
+        track, artist, album, album_type, stream, views, 
+        likes, comments, url_spotify, url_youtube, 
+        danceability, energy, valence
+       FROM songs 
        ${whereClause}
-       ORDER BY ${sort} ${order}
-       LIMIT ? OFFSET ?`,
-      [...params, limit, offset]
-    );
-
-    // Get unique artists and album types for filters
-    const [artists] = await conn.execute(
-      "SELECT DISTINCT artist FROM songs ORDER BY artist"
-    );
-    const [albumTypes] = await conn.execute(
-      "SELECT DISTINCT album_type FROM songs ORDER BY album_type"
+       ORDER BY ${safeSort} ${order}
+       LIMIT :limit OFFSET :offset`,
+      params
     );
 
     await conn.end();
@@ -49,10 +61,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       songs,
       totalCount,
-      filters: {
-        artists: (artists as any[]).map((a) => a.artist),
-        albumTypes: (albumTypes as any[]).map((t) => t.album_type),
-      },
+      currentPage: page,
+      totalPages: Math.ceil(totalCount / limit),
     });
   } catch (error) {
     console.error("Database error:", error);

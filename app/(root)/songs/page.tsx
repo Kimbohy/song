@@ -26,7 +26,9 @@ export default function SongsPage() {
     async function fetchSongs() {
       try {
         setLoading(true);
-        const res = await fetch("/api/songs");
+        const res = await fetch(
+          `/api/songs?page=${page}&limit=${itemsPerPage}&search=${search}`
+        );
         const data = await res.json();
         setSongs(data.songs);
         setTotalPages(Math.ceil(data.totalCount / itemsPerPage));
@@ -38,21 +40,7 @@ export default function SongsPage() {
     }
 
     fetchSongs();
-  }, []);
-
-  const filteredSongs = search
-    ? songs.filter(
-        (song) =>
-          song.track.toLowerCase().includes(search.toLowerCase()) ||
-          song.artist.toLowerCase().includes(search.toLowerCase()) ||
-          song.album.toLowerCase().includes(search.toLowerCase())
-      )
-    : songs;
-
-  const paginatedSongs = filteredSongs.slice(
-    (page - 1) * itemsPerPage,
-    page * itemsPerPage
-  );
+  }, [page, search]);
 
   return (
     <div className="space-y-6">
@@ -96,7 +84,7 @@ export default function SongsPage() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {paginatedSongs.map((song, idx) => (
+                  {songs.map((song, idx) => (
                     <motion.tr
                       key={`${song.track}-${song.artist}`}
                       initial={{ opacity: 0, y: 20 }}
@@ -139,21 +127,55 @@ export default function SongsPage() {
             </div>
           </div>
 
-          <div className="flex justify-center gap-2 mt-4">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+          {totalPages > 1 && (
+            <div className="flex justify-center gap-2 mt-4 overflow-x-auto px-4 py-2">
               <button
-                key={p}
-                onClick={() => setPage(p)}
+                onClick={() => setPage(Math.max(1, page - 1))}
+                disabled={page === 1}
                 className={`px-3 py-1 rounded ${
-                  p === page
-                    ? "bg-indigo-500 text-white"
+                  page === 1
+                    ? "bg-gray-100 text-gray-400"
                     : "bg-white text-gray-600 hover:bg-gray-50"
                 }`}
               >
-                {p}
+                Previous
               </button>
-            ))}
-          </div>
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum = page;
+                if (page <= 3) {
+                  pageNum = i + 1;
+                } else if (page >= totalPages - 2) {
+                  pageNum = totalPages - (4 - i);
+                } else {
+                  pageNum = page - 2 + i;
+                }
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => setPage(pageNum)}
+                    className={`px-3 py-1 rounded ${
+                      pageNum === page
+                        ? "bg-indigo-500 text-white"
+                        : "bg-white text-gray-600 hover:bg-gray-50"
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              })}
+              <button
+                onClick={() => setPage(Math.min(totalPages, page + 1))}
+                disabled={page === totalPages}
+                className={`px-3 py-1 rounded ${
+                  page === totalPages
+                    ? "bg-gray-100 text-gray-400"
+                    : "bg-white text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>
