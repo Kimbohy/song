@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Music Analytics Dashboard
+
+An interactive dashboard for visualizing and analyzing music streaming metrics across platforms.
+
+![Music Analytics Dashboard](public/dashboard-preview.png)
+
+## Features
+
+- **Performance Analysis**: Track top artists, genre distribution, and streaming trends
+- **Audio Features Analysis**: Visualize audio characteristics like danceability, energy, and valence
+- **Platform Comparison**: Compare performance metrics between Spotify and YouTube
+- **Artist Comparison**: Side-by-side comparison of up to three artists
+- **Advanced Filtering**: Filter data by artist, metrics, and more
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+
+## Tech Stack
+
+- **Framework**: Next.js 14 with App Router
+- **UI Components**: Tremor + Tailwind CSS
+- **Charting**: Recharts
+- **Animation**: Framer Motion
+- **Database**: MySQL
+
+## Dashboard Sections
+
+### Performance Tab
+
+Shows top artists by stream counts, genre distribution based on audio features, and streaming trends over time.
+
+### Audio Features Tab
+
+Displays audio features analysis with average values for danceability, energy, valence, acousticness, instrumentalness, liveness, and speechiness. Includes correlations between features and popularity.
+
+### Platform Analysis Tab
+
+Compares performance metrics between Spotify and YouTube, showing streams vs views scatter plot, engagement metrics, and detailed breakdown by track.
+
+### Artist Comparison Tab (Optional)
+
+When comparison mode is active, allows side-by-side comparison of up to three artists using radar charts, bar charts, and more.
+
+## API Endpoints
+
+### GET /api/stats
+
+Returns music streaming statistics. Supports the following query parameters:
+
+- `artist`: Filter by artist name
+- `sort`: Sort by a specific audio feature or metric
+- `minStreams`: Minimum stream count threshold
+- `limit`: Maximum number of results to return
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up your MySQL database and import data using the provided SQL script
+4. Update database configuration in `lib/db.ts`
+5. Run the development server: `npm run dev`
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Data Structure
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The dashboard works with song data that includes:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Artist, track, and album information
+- Streaming metrics (Spotify streams, YouTube views/likes/comments)
+- Audio features (danceability, energy, valence, etc.)
+- Platform URLs
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Customization
 
-## Learn More
+You can customize the dashboard by:
 
-To learn more about Next.js, take a look at the following resources:
+1. Modifying the chart components in `components/charts/`
+2. Adding new tabs or visualizations
+3. Extending the API with additional endpoints
+4. Adjusting the color scheme and styling
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
