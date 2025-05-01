@@ -1,0 +1,1 @@
+mysql -u admin -p'Teny123!' --local-infile=1 < import.sql
