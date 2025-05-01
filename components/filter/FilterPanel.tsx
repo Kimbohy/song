@@ -5,7 +5,6 @@ import {
   RefreshCcw,
   Music,
   BarChart2,
-  Calendar,
   Album,
   ArrowDownUp,
   Activity,
@@ -15,7 +14,6 @@ import {
 import ButtonRangeSelector from "./ButtonRangeSelector";
 import ButtonMultiSelect from "./ButtonMultiSelect";
 import SearchFilterBar from "./SearchFilterBar";
-import TimeFilter from "../dashboard/TimeFilter";
 
 interface FilterPanelProps {
   onApplyFilters: (filters: any) => void;
@@ -30,7 +28,6 @@ export default function FilterPanel({
 }: FilterPanelProps) {
   // Search and text filter states
   const [search, setSearch] = useState("");
-  const [timePeriod, setTimePeriod] = useState("all");
   const [selectedAlbumTypes, setSelectedAlbumTypes] = useState<string[]>([]);
 
   // Audio feature range selections - use predefined sets
@@ -111,10 +108,6 @@ export default function FilterPanel({
     }
   };
 
-  const handleTimeFilterChange = (period: string) => {
-    setTimePeriod(period);
-  };
-
   const handleSortChange = (id: string, values: string[]) => {
     if (values.length > 0) {
       setSort(values[0]);
@@ -127,7 +120,6 @@ export default function FilterPanel({
 
   const resetFilters = () => {
     setSearch("");
-    setTimePeriod("all");
     setSelectedAlbumTypes([]);
     setDanceabilityLevel("any");
     setEnergyLevel("any");
@@ -155,7 +147,6 @@ export default function FilterPanel({
     // Create a filter object
     const filters = {
       search,
-      timePeriod,
       albumTypes: selectedAlbumTypes,
       minDanceability: danceabilityRange.min,
       maxDanceability: danceabilityRange.max,
@@ -190,8 +181,9 @@ export default function FilterPanel({
       </div>
 
       <div className="space-y-6">
-        {/* Top row - Search and Time Period */}
+        {/* Search and Album Type */}
         <div className="grid gap-6 md:grid-cols-2">
+          {/* Search - left column */}
           <div className="p-4 bg-gray-50 rounded-xl">
             <div className="flex items-center mb-3">
               <Search className="w-4 h-4 mr-2 text-blue-600" />
@@ -205,20 +197,7 @@ export default function FilterPanel({
             />
           </div>
 
-          <div className="p-4 bg-gray-50 rounded-xl">
-            <div className="flex items-center mb-3">
-              <Calendar className="w-4 h-4 mr-2 text-blue-600" />
-              <h3 className="text-sm font-medium text-gray-800">Time Period</h3>
-            </div>
-            <TimeFilter
-              onFilterChange={handleTimeFilterChange}
-              defaultFilter={timePeriod}
-            />
-          </div>
-        </div>
-
-        {/* Album Type and Sorting */}
-        <div className="grid gap-6 md:grid-cols-2">
+          {/* Album Type - right column */}
           <div className="p-4 bg-gray-50 rounded-xl">
             <ButtonMultiSelect
               id="albumType"
@@ -229,40 +208,39 @@ export default function FilterPanel({
               onChange={handleMultiSelectChange}
             />
           </div>
+        </div>
 
-          <div className="p-4 bg-gray-50 rounded-xl">
-            <div className="mb-3">
-              <div className="flex items-center">
-                <ArrowDownUp className="w-4 h-4 mr-2 text-blue-600" />
-                <h3 className="text-sm font-medium text-gray-800">Sort By</h3>
-              </div>
-            </div>
+        {/* Sort By row spans both columns */}
+        <div className="p-4 bg-gray-50 rounded-xl">
+          <div className="flex items-center mb-3">
+            <ArrowDownUp className="w-4 h-4 mr-2 text-blue-600" />
+            <h3 className="text-sm font-medium text-gray-800">Sort By</h3>
+          </div>
 
-            <div className="flex space-x-3">
-              <div className="flex-1">
-                <ButtonMultiSelect
-                  id="sort"
-                  label=""
-                  options={sortOptions}
-                  selectedValues={[sort]}
-                  onChange={handleSortChange}
-                  allowMultiple={false}
-                />
-              </div>
-              <button
-                onClick={handleOrderToggle}
-                className={`
-                  px-4 py-2 font-medium transition-colors border rounded-lg mt-5
-                  ${
-                    order === "DESC"
-                      ? "bg-blue-50 text-blue-600 border-blue-200"
-                      : "bg-gray-50 text-gray-600 border-gray-200"
-                  }
-                `}
-              >
-                {order === "DESC" ? "Highest First" : "Lowest First"}
-              </button>
+          <div className="flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-3">
+            <div className="flex-1">
+              <ButtonMultiSelect
+                id="sort"
+                label=""
+                options={sortOptions}
+                selectedValues={[sort]}
+                onChange={handleSortChange}
+                allowMultiple={false}
+              />
             </div>
+            <button
+              onClick={handleOrderToggle}
+              className={`
+                px-4 py-2 font-medium transition-colors border rounded-lg
+                ${
+                  order === "DESC"
+                    ? "bg-blue-50 text-blue-600 border-blue-200"
+                    : "bg-gray-50 text-gray-600 border-gray-200"
+                }
+              `}
+            >
+              {order === "DESC" ? "Highest First" : "Lowest First"}
+            </button>
           </div>
         </div>
 

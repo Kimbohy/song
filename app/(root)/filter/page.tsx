@@ -71,7 +71,6 @@ export default function AdvancedFilterPage() {
     // Process the filters to transform them into API parameters
     const apiParams: Record<string, string> = {
       search: filterValues.search,
-      time: filterValues.timePeriod,
       minDanceability: filterValues.minDanceability.toString(),
       maxDanceability: filterValues.maxDanceability.toString(),
       minEnergy: filterValues.minEnergy.toString(),
@@ -115,22 +114,6 @@ export default function AdvancedFilterPage() {
         label: "Search",
         value: filterValues.search,
         onRemove: () => handleRemoveFilter("search"),
-      });
-    }
-
-    // Add time period tag
-    if (filterValues.timePeriod && filterValues.timePeriod !== "all") {
-      const periodLabels: { [key: string]: string } = {
-        week: "Past Week",
-        month: "Past Month",
-        year: "Past Year",
-      };
-
-      newFilters.push({
-        id: "timePeriod",
-        label: "Time Period",
-        value: periodLabels[filterValues.timePeriod] || filterValues.timePeriod,
-        onRemove: () => handleRemoveFilter("timePeriod"),
       });
     }
 
