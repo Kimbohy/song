@@ -45,3 +45,5 @@ IGNORE 1 LINES
  energy, song_key, loudness, speechiness, acousticness, instrumentalness, 
  liveness, valence, tempo, duration_ms, url_youtube, title, channel, 
  views, likes, comments, description, licensed, official_video, stream);
+
+DELETE FROM songs WHERE album_type = 'spotify:track:4KK5zXPdms6SRj1uZn1cmn'

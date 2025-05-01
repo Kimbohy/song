@@ -7,6 +7,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  Cell,
 } from "recharts";
 import { formatNumber } from "@/lib/utils";
 
@@ -45,12 +46,13 @@ export function BarChart({
 }: Props) {
   const [activeIndex, setActiveIndex] = useState(-1);
   const colorHex = COLORS[color] || COLORS.blue;
+  const isClickable = !!onClick;
 
   const handleClick = useCallback(
-    (data: any) => {
-      if (onClick) onClick(data);
+    (_dataPoint: any, index: number): void => {
+      if (onClick && data[index]) onClick(data[index]);
     },
-    [onClick]
+    [onClick, data]
   );
 
   const onMouseOver = useCallback((_: any, index: number) => {
@@ -62,15 +64,21 @@ export function BarChart({
   }, []);
 
   return (
-    <div className="w-full h-[300px]">
+    <div className={`w-full h-[300px] ${isClickable ? "cursor-pointer" : ""}`}>
+      {isClickable && (
+        <div className="flex items-center mb-2 text-xs text-gray-500">
+          <span className="h-1.5 w-1.5 rounded-full bg-blue-400 mr-1.5"></span>
+          Click on bars for details
+        </div>
+      )}
       <ResponsiveContainer>
         <RechartsBarChart
           data={data}
           layout={horizontal ? "vertical" : "horizontal"}
-          onClick={handleClick}
+          onClick={isClickable ? handleClick : undefined}
           margin={{ top: 10, right: 30, left: 20, bottom: 40 }}
         >
-          {showGrid && <CartesianGrid strokeDasharray="3 3" />}
+          {showGrid && <CartesianGrid strokeDasharray="3 3" opacity={0.4} />}
 
           <XAxis
             type={horizontal ? "number" : "category"}
@@ -79,6 +87,8 @@ export function BarChart({
             angle={-45}
             textAnchor="end"
             height={60}
+            tick={{ fill: "#64748b", fontSize: 11 }}
+            axisLine={{ stroke: "#cbd5e1" }}
           />
 
           <YAxis
@@ -86,6 +96,8 @@ export function BarChart({
             dataKey={horizontal ? xKey : undefined}
             tickFormatter={horizontal ? undefined : formatValue}
             width={65}
+            tick={{ fill: "#64748b", fontSize: 11 }}
+            axisLine={{ stroke: "#cbd5e1" }}
           />
 
           <Tooltip
@@ -93,24 +105,36 @@ export function BarChart({
             contentStyle={{
               backgroundColor: "white",
               borderRadius: "0.5rem",
-              boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+              boxShadow:
+                "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
               border: "none",
+              padding: "8px 12px",
             }}
+            cursor={{ fill: "rgba(245, 245, 245, 0.6)" }}
           />
 
           <Bar
             dataKey={yKey}
-            fill={colorHex}
             radius={[4, 4, 0, 0]}
             onMouseOver={onMouseOver}
             onMouseLeave={onMouseLeave}
-            opacity={0.9}
           >
             {data.map((_, index) => (
-              <rect
-                key={`bar-${index}`}
-                fillOpacity={activeIndex === index ? 1 : 0.9}
-                className="transition-all duration-200"
+              <Cell
+                key={`cell-${index}`}
+                fill={colorHex}
+                fillOpacity={activeIndex === index ? 1 : 0.8}
+                className={`transition-all duration-200 ${
+                  isClickable ? "hover:brightness-110" : ""
+                }`}
+                stroke={
+                  activeIndex === index
+                    ? isClickable
+                      ? "#1e40af"
+                      : "none"
+                    : "none"
+                }
+                strokeWidth={activeIndex === index && isClickable ? 1 : 0}
               />
             ))}
           </Bar>
