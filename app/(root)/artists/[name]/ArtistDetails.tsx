@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Music2, PlayCircle, Youtube, User2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { BarChart } from "@/components/charts/BarChart";
+import { RadarChart } from "@/components/charts/RadarChart";
 import { formatNumber } from "@/lib/utils";
 import SongModal from "@/components/SongModal";
 
@@ -66,9 +67,9 @@ export default function ArtistDetails({ initialData }: ArtistDetailsProps) {
 
   return (
     <div className="space-y-8">
-      <div className="bg-white rounded-lg shadow-sm p-6">
+      <div className="p-6 bg-white rounded-lg shadow-sm">
         <div className="flex items-center gap-4 mb-4">
-          <div className="p-4 bg-indigo-50 rounded-full">
+          <div className="p-4 rounded-full bg-indigo-50">
             <User2 className="w-8 h-8 text-indigo-500" />
           </div>
           <div>
@@ -77,24 +78,24 @@ export default function ArtistDetails({ initialData }: ArtistDetailsProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-          <div className="bg-gray-50 rounded-lg p-4">
+        <div className="grid grid-cols-1 gap-4 mt-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="p-4 rounded-lg bg-gray-50">
             <p className="text-sm text-gray-500">Total Songs</p>
             <p className="text-2xl font-semibold">{artist.song_count}</p>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4">
+          <div className="p-4 rounded-lg bg-gray-50">
             <p className="text-sm text-gray-500">Total Streams</p>
             <p className="text-2xl font-semibold">
               {formatNumber(artist.total_streams)}
             </p>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4">
+          <div className="p-4 rounded-lg bg-gray-50">
             <p className="text-sm text-gray-500">Total Views</p>
             <p className="text-2xl font-semibold">
               {formatNumber(artist.total_views)}
             </p>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4">
+          <div className="p-4 rounded-lg bg-gray-50">
             <p className="text-sm text-gray-500">Average Energy</p>
             <p className="text-2xl font-semibold">
               {(artist.avg_energy * 10).toFixed(1)}/10
@@ -103,33 +104,14 @@ export default function ArtistDetails({ initialData }: ArtistDetailsProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-xl font-semibold mb-6">Audio Features</h2>
-          <div className="space-y-6">
-            {audioFeatures.map((feature) => (
-              <div key={feature.name}>
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-600">{feature.name}</span>
-                  <span className="font-medium">
-                    {(feature.value * 10).toFixed(1)}/10
-                  </span>
-                </div>
-                <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${feature.value * 100}%` }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="h-full bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="p-6 bg-white rounded-lg shadow-sm">
+          <h2 className="mb-6 text-xl font-semibold">Audio Features</h2>
+          <RadarChart data={audioFeatures} color="purple" fullMark={1} />
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-xl font-semibold mb-6">
+        <div className="p-6 bg-white rounded-lg shadow-sm">
+          <h2 className="mb-6 text-xl font-semibold">
             Album Type Distribution
           </h2>
           <BarChart
@@ -141,28 +123,28 @@ export default function ArtistDetails({ initialData }: ArtistDetailsProps) {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <h2 className="text-xl font-semibold mb-6">Songs</h2>
+      <div className="p-6 bg-white rounded-lg shadow-sm">
+        <h2 className="mb-6 text-xl font-semibold">Songs</h2>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">
+                <th className="px-4 py-2 text-sm font-medium text-left text-gray-500">
                   Track
                 </th>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">
+                <th className="px-4 py-2 text-sm font-medium text-left text-gray-500">
                   Album
                 </th>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">
+                <th className="px-4 py-2 text-sm font-medium text-left text-gray-500">
                   Streams
                 </th>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">
+                <th className="px-4 py-2 text-sm font-medium text-left text-gray-500">
                   Views
                 </th>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">
+                <th className="px-4 py-2 text-sm font-medium text-left text-gray-500">
                   Danceability
                 </th>
-                <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">
+                <th className="px-4 py-2 text-sm font-medium text-left text-gray-500">
                   Energy
                 </th>
               </tr>
@@ -171,7 +153,7 @@ export default function ArtistDetails({ initialData }: ArtistDetailsProps) {
               {songs.map((song) => (
                 <motion.tr
                   key={song.track}
-                  className="hover:bg-gray-50 cursor-pointer"
+                  className="cursor-pointer hover:bg-gray-50"
                   onClick={() => handleSongSelect(song)}
                   whileHover={{ scale: 1.01 }}
                   transition={{ duration: 0.2 }}

@@ -45,7 +45,7 @@ export default function ArtistsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between p-6 bg-white rounded-lg shadow-sm">
         <div>
           <h1 className="text-2xl font-bold">Artists</h1>
           <p className="text-gray-600">Browse all artists and their stats</p>
@@ -53,7 +53,7 @@ export default function ArtistsPage() {
         <input
           type="search"
           placeholder="Search artists..."
-          className="px-4 py-2 border border-gray-200 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-64 px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -61,11 +61,11 @@ export default function ArtistsPage() {
 
       {loading ? (
         <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500" />
+          <div className="w-8 h-8 border-b-2 border-indigo-500 rounded-full animate-spin" />
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {artists.map((artist, idx) => (
               <Link
                 key={artist.artist}
@@ -75,10 +75,10 @@ export default function ArtistsPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-all duration-200 cursor-pointer"
+                  className="p-6 transition-all duration-200 bg-white rounded-lg shadow-sm cursor-pointer hover:shadow-md"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="p-3 bg-indigo-50 rounded-lg">
+                    <div className="p-3 rounded-lg bg-indigo-50">
                       <Music2 className="w-6 h-6 text-indigo-500" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -95,7 +95,7 @@ export default function ArtistsPage() {
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-500">Total Streams</span>
                           <div className="flex items-center gap-1 text-green-600">
-                            <PlayCircle className="h-4 w-4" />
+                            <PlayCircle className="w-4 h-4" />
                             <span>{formatNumber(artist.total_streams)}</span>
                           </div>
                         </div>
@@ -122,7 +122,7 @@ export default function ArtistsPage() {
                           </div>
                           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-emerald-500 rounded-full"
+                              className="h-full rounded-full bg-emerald-500"
                               style={{
                                 width: `${Math.round(
                                   artist.avg_energy * 100

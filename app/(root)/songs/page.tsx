@@ -53,7 +53,7 @@ export default function SongsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between p-6 bg-white rounded-lg shadow-sm">
         <div>
           <h1 className="text-2xl font-bold">Songs</h1>
           <p className="text-gray-600">Browse and explore all songs</p>
@@ -61,7 +61,7 @@ export default function SongsPage() {
         <input
           type="search"
           placeholder="Search songs..."
-          className="px-4 py-2 border border-gray-200 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-64 px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -69,25 +69,25 @@ export default function SongsPage() {
 
       {loading ? (
         <div className="flex justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500" />
+          <div className="w-8 h-8 border-b-2 border-indigo-500 rounded-full animate-spin" />
         </div>
       ) : (
         <>
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="overflow-hidden bg-white rounded-lg shadow-sm">
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                       Song
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                       Album
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                       Streams
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                       Views
                     </th>
                   </tr>
@@ -99,7 +99,7 @@ export default function SongsPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.05 }}
-                      className="hover:bg-gray-50 cursor-pointer"
+                      className="cursor-pointer hover:bg-gray-50"
                       onClick={() => setSelectedSong(song)}
                     >
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -120,13 +120,13 @@ export default function SongsPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-1 text-green-600">
-                          <PlayCircle className="h-4 w-4" />
+                          <PlayCircle className="w-4 h-4" />
                           <span>{formatNumber(song.stream)}</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-1 text-red-600">
-                          <Youtube className="h-4 w-4" />
+                          <Youtube className="w-4 h-4" />
                           <span>{formatNumber(song.views)}</span>
                         </div>
                       </td>
@@ -138,7 +138,7 @@ export default function SongsPage() {
           </div>
 
           {totalPages > 1 && (
-            <div className="flex justify-center gap-2 mt-4 overflow-x-auto px-4 py-2">
+            <div className="flex justify-center gap-2 px-4 py-2 mt-4 overflow-x-auto">
               <button
                 onClick={() => setPage(Math.max(1, page - 1))}
                 disabled={page === 1}

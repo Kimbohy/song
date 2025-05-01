@@ -191,11 +191,13 @@ export default function AdvancedFilterPage() {
 
   return (
     <div className="container px-4 py-8 mx-auto">
-      <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold">Interactive Song Explorer</h1>
-        <p className="mb-4 text-gray-600">
-          Discover music by audio features, popularity, and more
-        </p>
+      <div className="mb-8 ">
+        <div className="p-6 mb-4 bg-white rounded-lg shadow-sm">
+          <h1 className="mb-2 text-3xl font-bold">Interactive Song Explorer</h1>
+          <p className="text-gray-600 ">
+            Discover music by audio features, popularity, and more
+          </p>
+        </div>
 
         {/* Filter Panel */}
         <FilterPanel
