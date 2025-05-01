@@ -48,7 +48,8 @@ export async function GET(request: NextRequest) {
       `SELECT 
         track, artist, album, album_type, stream, views, 
         likes, comments, url_spotify, url_youtube, 
-        danceability, energy, valence
+        danceability, energy, valence, acousticness, instrumentalness,
+        song_key, tempo, duration_ms
        FROM songs 
        ${whereClause}
        ORDER BY ${safeSort} ${order}

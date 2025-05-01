@@ -2,7 +2,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { LayoutDashboard, Music2, Users } from "lucide-react";
+import {
+  LayoutDashboard,
+  Music2,
+  Users,
+  SlidersHorizontal,
+} from "lucide-react";
 
 const tabs = [
   {
@@ -19,6 +24,11 @@ const tabs = [
     name: "Artists",
     href: "/artists",
     icon: Users,
+  },
+  {
+    name: "Advanced Filter",
+    href: "/filter",
+    icon: SlidersHorizontal,
   },
 ];
 

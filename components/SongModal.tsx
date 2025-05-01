@@ -47,83 +47,83 @@ export default function SongModal({ song, onClose }: SongModalProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
       onClick={onClose}
     >
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
-        className="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 shadow-2xl"
+        className="w-full max-w-2xl p-8 mx-4 bg-white shadow-2xl rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-start mb-6">
+        <div className="flex items-start justify-between mb-6">
           <div>
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <h2 className="text-3xl font-bold text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text">
               {song.track}
             </h2>
-            <p className="text-gray-600 text-lg">{song.artist}</p>
+            <p className="text-lg text-gray-600">{song.artist}</p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 transition-colors rounded-full hover:bg-gray-100"
           >
-            <X className="h-6 w-6 text-gray-500" />
+            <X className="w-6 h-6 text-gray-500" />
           </button>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid gap-8 md:grid-cols-2">
           <div className="space-y-6">
-            <div className="bg-gray-50 rounded-xl p-4">
+            <div className="p-4 bg-gray-50 rounded-xl">
               <div className="flex items-center gap-2 mb-3">
-                <Music className="h-5 w-5 text-blue-600" />
+                <Music className="w-5 h-5 text-blue-600" />
                 <h3 className="font-semibold">Album Information</h3>
               </div>
-              <p className="text-gray-800 font-medium">{song.album}</p>
+              <p className="font-medium text-gray-800">{song.album}</p>
               <p className="text-sm text-gray-500 capitalize">
                 {song.album_type}
               </p>
             </div>
 
-            <div className="bg-gray-50 rounded-xl p-4">
+            <div className="p-4 bg-gray-50 rounded-xl">
               <div className="flex items-center gap-2 mb-4">
-                <PlayCircle className="h-5 w-5 text-blue-600" />
+                <PlayCircle className="w-5 h-5 text-blue-600" />
                 <h3 className="font-semibold">Performance Metrics</h3>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Music2 className="h-4 w-4 text-green-500" />
+                    <Music2 className="w-4 h-4 text-green-500" />
                     <p className="text-sm text-gray-600">Streams</p>
                   </div>
-                  <p className="font-medium text-lg">
+                  <p className="text-lg font-medium">
                     {formatNumber(song.stream)}
                   </p>
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <Video className="h-4 w-4 text-red-500" />
+                    <Video className="w-4 h-4 text-red-500" />
                     <p className="text-sm text-gray-600">Views</p>
                   </div>
-                  <p className="font-medium text-lg">
+                  <p className="text-lg font-medium">
                     {formatNumber(song.views)}
                   </p>
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <ThumbsUp className="h-4 w-4 text-blue-500" />
+                    <ThumbsUp className="w-4 h-4 text-blue-500" />
                     <p className="text-sm text-gray-600">Likes</p>
                   </div>
-                  <p className="font-medium text-lg">
+                  <p className="text-lg font-medium">
                     {formatNumber(song.likes)}
                   </p>
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <MessageCircle className="h-4 w-4 text-indigo-500" />
+                    <MessageCircle className="w-4 h-4 text-indigo-500" />
                     <p className="text-sm text-gray-600">Comments</p>
                   </div>
-                  <p className="font-medium text-lg">
+                  <p className="text-lg font-medium">
                     {formatNumber(song.comments)}
                   </p>
                 </div>
@@ -131,23 +131,23 @@ export default function SongModal({ song, onClose }: SongModalProps) {
             </div>
           </div>
 
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="font-semibold mb-6">Audio Features</h3>
+          <div className="p-6 bg-gray-50 rounded-xl">
+            <h3 className="mb-6 font-semibold">Audio Features</h3>
             <div className="space-y-6">
               {metrics.map((metric) => (
                 <div key={metric.name}>
-                  <div className="flex justify-between text-sm mb-2">
+                  <div className="flex justify-between mb-2 text-sm">
                     <span className="text-gray-600">{metric.name}</span>
                     <span className="font-medium">
                       {Math.round(metric.value * 100)}%
                     </span>
                   </div>
-                  <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="h-2 overflow-hidden bg-gray-200 rounded-full">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${metric.value * 100}%` }}
                       transition={{ duration: 0.8, ease: "easeOut" }}
-                      className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
+                      className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500"
                     />
                   </div>
                 </div>
@@ -156,15 +156,15 @@ export default function SongModal({ song, onClose }: SongModalProps) {
           </div>
         </div>
 
-        <div className="mt-8 flex gap-4">
+        <div className="flex gap-4 mt-8">
           {song.url_spotify && (
             <a
               href={song.url_spotify}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-xl text-center hover:from-green-600 hover:to-green-700 transition-all duration-200 flex items-center justify-center gap-2 font-medium"
+              className="flex items-center justify-center flex-1 gap-2 px-6 py-3 font-medium text-center text-white transition-all duration-200 bg-gradient-to-r from-green-500 to-green-600 rounded-xl hover:from-green-600 hover:to-green-700"
             >
-              <FontAwesomeIcon icon={faSpotify} style={{ color: "#ffffff" }} />
+              <FontAwesomeIcon icon={faSpotify} style={{ color: "#ffffff" }} size="lg" />
               Open in Spotify
             </a>
           )}
@@ -173,9 +173,9 @@ export default function SongModal({ song, onClose }: SongModalProps) {
               href={song.url_youtube}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-xl text-center hover:from-red-600 hover:to-red-700 transition-all duration-200 flex items-center justify-center gap-2 font-medium"
+              className="flex items-center justify-center flex-1 gap-2 px-6 py-3 font-medium text-center text-white transition-all duration-200 bg-gradient-to-r from-red-500 to-red-600 rounded-xl hover:from-red-600 hover:to-red-700"
             >
-              <FontAwesomeIcon icon={faYoutube} style={{ color: "#ffffff" }} />
+              <FontAwesomeIcon icon={faYoutube} style={{ color: "#ffffff" }} size="lg" />
               Watch on YouTube
             </a>
           )}
