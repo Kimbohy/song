@@ -9,7 +9,7 @@ export default function RootLayout({
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       <main className="pl-64">
-        <div className="max-w-7xl mx-auto px-8 py-8">{children}</div>
+        <div className="max-w-7xl mx-auto px-1 py-8">{children}</div>
       </main>
     </div>
   );

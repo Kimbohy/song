@@ -22,7 +22,7 @@ export async function GET() {
       FROM songs 
       GROUP BY artist
       ORDER BY total_streams DESC 
-      LIMIT 10
+      LIMIT 5
     `);
 
     // Get genre distribution (using album_type as proxy)

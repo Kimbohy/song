@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { PlayCircle, Youtube } from "lucide-react";
 import { motion } from "framer-motion";
 import { formatNumber } from "@/lib/utils";
+import SongModal from "@/components/SongModal";
 
 interface Song {
   track: string;
@@ -12,6 +13,13 @@ interface Song {
   album_type: string;
   stream: number;
   views: number;
+  likes: number;
+  comments: number;
+  danceability: number;
+  energy: number;
+  valence: number;
+  url_spotify?: string;
+  url_youtube?: string;
 }
 
 export default function SongsPage() {
@@ -20,6 +28,7 @@ export default function SongsPage() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -90,7 +99,8 @@ export default function SongsPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.05 }}
-                      className="hover:bg-gray-50"
+                      className="hover:bg-gray-50 cursor-pointer"
+                      onClick={() => setSelectedSong(song)}
                     >
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div>
@@ -178,6 +188,8 @@ export default function SongsPage() {
           )}
         </>
       )}
+
+      <SongModal song={selectedSong} onClose={() => setSelectedSong(null)} />
     </div>
   );
 }

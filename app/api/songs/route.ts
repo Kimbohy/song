@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const order =
       urlParams.get("order")?.toUpperCase() === "ASC" ? "ASC" : "DESC";
     const page = parseInt(urlParams.get("page") || "1");
-    const limit = parseInt(urlParams.get("limit") || "10"); // Changed default to 10 to match frontend
+    const limit = parseInt(urlParams.get("limit") || "10");
     const offset = (page - 1) * limit;
 
     const conn = await createConnection();
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
     );
     const totalCount = (countResult as any)[0].count;
 
-    // Get songs with pagination and sorting
+    // Get songs with pagination and sorting, including additional fields for the modal
     const [songs] = await conn.query(
       `SELECT 
         track, artist, album, album_type, stream, views, 

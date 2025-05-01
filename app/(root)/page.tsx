@@ -55,7 +55,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8 pb-8">
-      <div>
+      <div className="bg-white rounded-lg shadow-sm p-6">
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <p className="text-gray-600">Overview of your music analytics</p>
       </div>
