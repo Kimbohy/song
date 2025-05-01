@@ -59,7 +59,7 @@ export default function SongModal({ song, onClose }: SongModalProps) {
       >
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               {song.track}
             </h2>
             <p className="text-gray-600 text-lg">{song.artist}</p>
@@ -76,7 +76,7 @@ export default function SongModal({ song, onClose }: SongModalProps) {
           <div className="space-y-6">
             <div className="bg-gray-50 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-3">
-                <Music className="h-5 w-5 text-indigo-600" />
+                <Music className="h-5 w-5 text-blue-600" />
                 <h3 className="font-semibold">Album Information</h3>
               </div>
               <p className="text-gray-800 font-medium">{song.album}</p>
@@ -87,7 +87,7 @@ export default function SongModal({ song, onClose }: SongModalProps) {
 
             <div className="bg-gray-50 rounded-xl p-4">
               <div className="flex items-center gap-2 mb-4">
-                <PlayCircle className="h-5 w-5 text-indigo-600" />
+                <PlayCircle className="h-5 w-5 text-blue-600" />
                 <h3 className="font-semibold">Performance Metrics</h3>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -120,7 +120,7 @@ export default function SongModal({ song, onClose }: SongModalProps) {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <MessageCircle className="h-4 w-4 text-purple-500" />
+                    <MessageCircle className="h-4 w-4 text-indigo-500" />
                     <p className="text-sm text-gray-600">Comments</p>
                   </div>
                   <p className="font-medium text-lg">
@@ -147,7 +147,7 @@ export default function SongModal({ song, onClose }: SongModalProps) {
                       initial={{ width: 0 }}
                       animate={{ width: `${metric.value * 100}%` }}
                       transition={{ duration: 0.8, ease: "easeOut" }}
-                      className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full"
+                      className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full"
                     />
                   </div>
                 </div>

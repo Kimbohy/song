@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Music2, PlayCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { formatNumber } from "@/lib/utils";
+import Link from "next/link";
 
 interface Artist {
   artist: string;
@@ -66,67 +67,75 @@ export default function ArtistsPage() {
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {artists.map((artist, idx) => (
-              <motion.div
+              <Link
                 key={artist.artist}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.05 }}
-                className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
+                href={`/artists/${encodeURIComponent(artist.artist)}`}
               >
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-indigo-50 rounded-lg">
-                    <Music2 className="w-6 h-6 text-indigo-500" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold truncate">{artist.artist}</h3>
-                    <div className="mt-4 space-y-3">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Total Songs</span>
-                        <span className="font-medium">
-                          {artist.track_count}
-                        </span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-gray-500">Total Streams</span>
-                        <div className="flex items-center gap-1 text-green-600">
-                          <PlayCircle className="h-4 w-4" />
-                          <span>{formatNumber(artist.total_streams)}</span>
-                        </div>
-                      </div>
-                      <div className="space-y-2">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                  className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-all duration-200 cursor-pointer"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-indigo-50 rounded-lg">
+                      <Music2 className="w-6 h-6 text-indigo-500" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold truncate">
+                        {artist.artist}
+                      </h3>
+                      <div className="mt-4 space-y-3">
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-500">Danceability</span>
-                          <span>
-                            {Math.round(artist.avg_danceability * 100)}%
+                          <span className="text-gray-500">Total Songs</span>
+                          <span className="font-medium">
+                            {artist.track_count}
                           </span>
                         </div>
-                        <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-blue-500 rounded-full"
-                            style={{
-                              width: `${Math.round(
-                                artist.avg_danceability * 100
-                              )}%`,
-                            }}
-                          />
-                        </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-500">Energy</span>
-                          <span>{Math.round(artist.avg_energy * 100)}%</span>
+                          <span className="text-gray-500">Total Streams</span>
+                          <div className="flex items-center gap-1 text-green-600">
+                            <PlayCircle className="h-4 w-4" />
+                            <span>{formatNumber(artist.total_streams)}</span>
+                          </div>
                         </div>
-                        <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-emerald-500 rounded-full"
-                            style={{
-                              width: `${Math.round(artist.avg_energy * 100)}%`,
-                            }}
-                          />
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-500">Danceability</span>
+                            <span>
+                              {Math.round(artist.avg_danceability * 100)}%
+                            </span>
+                          </div>
+                          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-blue-500 rounded-full"
+                              style={{
+                                width: `${Math.round(
+                                  artist.avg_danceability * 100
+                                )}%`,
+                              }}
+                            />
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-500">Energy</span>
+                            <span>{Math.round(artist.avg_energy * 100)}%</span>
+                          </div>
+                          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-emerald-500 rounded-full"
+                              style={{
+                                width: `${Math.round(
+                                  artist.avg_energy * 100
+                                )}%`,
+                              }}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              </Link>
             ))}
           </div>
 
