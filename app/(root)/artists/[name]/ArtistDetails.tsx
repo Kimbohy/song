@@ -97,7 +97,7 @@ export default function ArtistDetails({ initialData }: ArtistDetailsProps) {
           <div className="bg-gray-50 rounded-lg p-4">
             <p className="text-sm text-gray-500">Average Energy</p>
             <p className="text-2xl font-semibold">
-              {Math.round(artist.avg_energy * 100)}%
+              {(artist.avg_energy * 10).toFixed(1)}/10
             </p>
           </div>
         </div>
@@ -112,7 +112,7 @@ export default function ArtistDetails({ initialData }: ArtistDetailsProps) {
                 <div className="flex justify-between text-sm mb-2">
                   <span className="text-gray-600">{feature.name}</span>
                   <span className="font-medium">
-                    {Math.round(feature.value * 100)}%
+                    {(feature.value * 10).toFixed(1)}/10
                   </span>
                 </div>
                 <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -181,10 +181,10 @@ export default function ArtistDetails({ initialData }: ArtistDetailsProps) {
                   <td className="px-4 py-2">{formatNumber(song.stream)}</td>
                   <td className="px-4 py-2">{formatNumber(song.views)}</td>
                   <td className="px-4 py-2">
-                    {Math.round(song.danceability * 100)}%
+                    {(song.danceability * 10).toFixed(1)}/10
                   </td>
                   <td className="px-4 py-2">
-                    {Math.round(song.energy * 100)}%
+                    {(song.energy * 10).toFixed(1)}/10
                   </td>
                 </motion.tr>
               ))}

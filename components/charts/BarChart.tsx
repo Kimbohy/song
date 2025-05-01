@@ -75,7 +75,6 @@ export function BarChart({
         <RechartsBarChart
           data={data}
           layout={horizontal ? "vertical" : "horizontal"}
-          onClick={isClickable ? handleClick : undefined}
           margin={{ top: 10, right: 30, left: 20, bottom: 40 }}
         >
           {showGrid && <CartesianGrid strokeDasharray="3 3" opacity={0.4} />}
@@ -118,6 +117,7 @@ export function BarChart({
             radius={[4, 4, 0, 0]}
             onMouseOver={onMouseOver}
             onMouseLeave={onMouseLeave}
+            onClick={isClickable ? handleClick : undefined}
           >
             {data.map((_, index) => (
               <Cell
