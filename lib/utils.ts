@@ -2,12 +2,18 @@
  * Formats a number for display using compact notation
  * e.g. 1500 -> 1.5K, 1500000 -> 1.5M
  */
-export const formatNumber = (num: number): string => {
-  return new Intl.NumberFormat("en-US", {
-    notation: "compact",
-    compactDisplay: "short",
-  }).format(num);
-};
+export function formatNumber(num: number): string {
+  if (num >= 1_000_000_000) {
+    return (num / 1_000_000_000).toFixed(1) + "B";
+  }
+  if (num >= 1_000_000) {
+    return (num / 1_000_000).toFixed(1) + "M";
+  }
+  if (num >= 1_000) {
+    return (num / 1_000).toFixed(1) + "K";
+  }
+  return num.toString();
+}
 
 /**
  * Formats a number as a percentage
@@ -96,3 +102,44 @@ export const createColorGradient = (
 
   return gradient;
 };
+
+/**
+ * Calculates statistics for a list of songs
+ */
+export function calculateStats(songs: any[]) {
+  const totalSongs = songs.length;
+  const uniqueArtists = new Set(songs.map((song) => song.artist)).size;
+  const totalStreams = songs.reduce((sum, song) => sum + (song.stream || 0), 0);
+  const totalViews = songs.reduce((sum, song) => sum + (song.views || 0), 0);
+
+  return {
+    totalSongs,
+    uniqueArtists,
+    totalStreams,
+    totalViews,
+  };
+}
+
+export type AudioFeature =
+  | "danceability"
+  | "energy"
+  | "valence"
+  | "acousticness"
+  | "instrumentalness";
+
+export interface Song {
+  id: number;
+  artist: string;
+  track: string;
+  album: string;
+  album_type: string;
+  danceability: number;
+  energy: number;
+  valence: number;
+  acousticness: number;
+  instrumentalness: number;
+  stream: number;
+  views: number;
+  likes: number;
+  comments: number;
+}
