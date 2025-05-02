@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { formatNumber } from "@/lib/utils";
 import FilteredSongModal from "@/components/FilteredSongModal";
 import FilterPanel from "@/components/filter/FilterPanel";
@@ -15,6 +15,7 @@ export default function AdvancedFilterPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [selectedSong, setSelectedSong] = useState(null);
   const [albumTypes, setAlbumTypes] = useState<string[]>([]);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   // Active filters for tag display
   const [activeFilters, setActiveFilters] = useState<any[]>([]);
@@ -26,6 +27,26 @@ export default function AdvancedFilterPage() {
     // Initial load of songs
     fetchFilteredSongs();
   }, []);
+
+  // Function to scroll to results section
+  const scrollToResults = () => {
+    if (resultsRef.current) {
+      // Wait until loading is finished before scrolling
+      if (!isLoading) {
+        resultsRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }
+  };
+
+  // Effect to scroll to results when loading finishes
+  useEffect(() => {
+    if (!isLoading && songs.length > 0 && activeFilters.length > 0) {
+      scrollToResults();
+    }
+  }, [isLoading]);
 
   const fetchAlbumTypes = async () => {
     try {
@@ -97,6 +118,8 @@ export default function AdvancedFilterPage() {
     // Fetch songs with new filters
     setCurrentPage(1);
     fetchFilteredSongs(1, apiParams);
+
+    // We no longer need to call scrollToResults here as it will be triggered by the useEffect
   };
 
   const handlePageChange = (page: number) => {
@@ -215,7 +238,7 @@ export default function AdvancedFilterPage() {
       )}
 
       {/* Results section */}
-      <div>
+      <div ref={resultsRef}>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">
             Results

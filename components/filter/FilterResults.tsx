@@ -220,7 +220,7 @@ export default function FilterResults({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <div className="text-sm text-gray-500">
             Showing page {currentPage} of {totalPages}
           </div>
