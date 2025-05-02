@@ -1,15 +1,29 @@
 import { createConnection } from "@/lib/db";
 import { NextResponse } from "next/server";
-import { calculateStats } from "@/lib/utils";
+
+interface SummaryStats {
+  totalSongs: number;
+  uniqueArtists: number;
+  totalStreams: number;
+  totalViews: number;
+}
 
 export async function GET() {
   try {
     const conn = await createConnection();
 
-    // Fetch summary stats
-    const [songs] = await conn.execute(
-      "SELECT * FROM songs ORDER BY stream DESC LIMIT 1000"
-    );
+    // Get summary stats directly from SQL
+    const [summaryStatsRows] = await conn.execute(`
+      SELECT 
+        COUNT(*) as totalSongs,
+        COUNT(DISTINCT artist) as uniqueArtists,
+        SUM(stream) as totalStreams,
+        SUM(views) as totalViews
+      FROM songs
+    `);
+    
+    // Type assertion to handle mysql2 result format
+    const summaryStats = summaryStatsRows as unknown as SummaryStats[];
 
     // Get top artists by total streams
     const [topArtists] = await conn.execute(`
@@ -49,7 +63,7 @@ export async function GET() {
     await conn.end();
 
     return NextResponse.json({
-      stats: calculateStats(songs as any[]),
+      stats: summaryStats[0],
       topArtists,
       genreStats,
       platformStats,
