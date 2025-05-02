@@ -29,18 +29,37 @@ export default function SongsPage() {
   const [search, setSearch] = useState("");
   const [totalPages, setTotalPages] = useState(1);
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
+  const [sortField, setSortField] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
   const itemsPerPage = 10;
+
+  const toggleSort = (field: string) => {
+    if (sortField === field) {
+      // If already sorting by this field, toggle direction
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      // New sort field, default to ascending
+      setSortField(field);
+      setSortDirection("asc");
+    }
+  };
 
   useEffect(() => {
     async function fetchSongs() {
       try {
         setLoading(true);
         const res = await fetch(
-          `/api/songs?page=${page}&limit=${itemsPerPage}&search=${search}`
+          `/api/songs?page=${page}&limit=${itemsPerPage}&search=${search}${
+            sortField
+              ? `&sortField=${sortField}&sortDirection=${sortDirection}`
+              : ""
+          }`
         );
         const data = await res.json();
         setSongs(data.songs);
         setTotalPages(Math.ceil(data.totalCount / itemsPerPage));
+        setInitialLoadDone(true);
       } catch (error) {
         console.error("Failed to fetch songs:", error);
       } finally {
@@ -48,8 +67,11 @@ export default function SongsPage() {
       }
     }
 
-    fetchSongs();
-  }, [page, search]);
+    // Only fetch songs if we haven't loaded before or if search/sort/page has changed
+    if (!initialLoadDone || page > 1 || search !== "" || sortField !== null) {
+      fetchSongs();
+    }
+  }, [page, search, sortField, sortDirection, initialLoadDone]);
 
   return (
     <div className="space-y-6">
@@ -78,17 +100,49 @@ export default function SongsPage() {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                    <th
+                      className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase cursor-pointer"
+                      onClick={() => toggleSort("track")}
+                    >
                       Song
+                      {sortField === "track" && (
+                        <span className="ml-1">
+                          {sortDirection === "asc" ? "↑" : "↓"}
+                        </span>
+                      )}
                     </th>
-                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                    <th
+                      className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase cursor-pointer"
+                      onClick={() => toggleSort("album")}
+                    >
                       Album
+                      {sortField === "album" && (
+                        <span className="ml-1">
+                          {sortDirection === "asc" ? "↑" : "↓"}
+                        </span>
+                      )}
                     </th>
-                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                    <th
+                      className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase cursor-pointer"
+                      onClick={() => toggleSort("stream")}
+                    >
                       Streams
+                      {sortField === "stream" && (
+                        <span className="ml-1">
+                          {sortDirection === "asc" ? "↑" : "↓"}
+                        </span>
+                      )}
                     </th>
-                    <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
+                    <th
+                      className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase cursor-pointer"
+                      onClick={() => toggleSort("views")}
+                    >
                       Views
+                      {sortField === "views" && (
+                        <span className="ml-1">
+                          {sortDirection === "asc" ? "↑" : "↓"}
+                        </span>
+                      )}
                     </th>
                   </tr>
                 </thead>

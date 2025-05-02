@@ -5,9 +5,9 @@ export async function GET(request: NextRequest) {
   try {
     const urlParams = request.nextUrl.searchParams;
     const search = urlParams.get("search") || "";
-    const sort = urlParams.get("sort") || "stream";
-    const order =
-      urlParams.get("order")?.toUpperCase() === "ASC" ? "ASC" : "DESC";
+    const sortField = urlParams.get("sortField") || "stream";
+    const sortDirection =
+      urlParams.get("sortDirection")?.toLowerCase() === "asc" ? "ASC" : "DESC";
     const page = parseInt(urlParams.get("page") || "1");
     const limit = parseInt(urlParams.get("limit") || "10");
     const offset = (page - 1) * limit;
@@ -24,7 +24,9 @@ export async function GET(request: NextRequest) {
       "likes",
       "comments",
     ];
-    const safeSort = allowedSortColumns.includes(sort) ? sort : "stream";
+    const safeSort = allowedSortColumns.includes(sortField)
+      ? sortField
+      : "stream";
 
     // Build the WHERE clause and parameters
     const whereClause = search
@@ -52,7 +54,7 @@ export async function GET(request: NextRequest) {
         song_key, tempo, duration_ms
        FROM songs 
        ${whereClause}
-       ORDER BY ${safeSort} ${order}
+       ORDER BY ${safeSort} ${sortDirection}
        LIMIT :limit OFFSET :offset`,
       params
     );
