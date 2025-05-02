@@ -40,6 +40,11 @@ export default function FilterPanel({
   const [sort, setSort] = useState("stream");
   const [order, setOrder] = useState<"ASC" | "DESC">("DESC");
 
+  // Include all potential album types including compilation
+  const allAlbumTypes = [...new Set([...albumTypes, "compilation"])].filter(
+    Boolean
+  );
+
   const danceabilityOptions = [
     { value: "any", label: "Any", min: 0, max: 1 },
     { value: "low", label: "Low", min: 0, max: 0.33 },
@@ -203,7 +208,10 @@ export default function FilterPanel({
               id="albumType"
               label="Album Type"
               icon={<Album size={16} />}
-              options={albumTypes.map((type) => ({ value: type, label: type }))}
+              options={allAlbumTypes.map((type) => ({
+                value: type,
+                label: type,
+              }))}
               selectedValues={selectedAlbumTypes}
               onChange={handleMultiSelectChange}
             />
@@ -310,7 +318,7 @@ export default function FilterPanel({
         >
           {isLoading ? (
             <>
-              <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <div className="w-4 h-4 mr-2 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
               Finding Songs...
             </>
           ) : (
