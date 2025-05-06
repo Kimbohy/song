@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { Music2, PlayCircle, Youtube, User2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { BarChart } from "@/components/charts/BarChart";
 import { RadarChart } from "@/components/charts/RadarChart";
+import { PieChart } from "@/components/charts/PieChart";
 import { formatNumber } from "@/lib/utils";
 import SongModal from "@/components/SongModal";
+import DataModal from "@/components/charts/DataModal";
 
 interface ArtistStats {
   artist: string;
@@ -48,6 +49,10 @@ interface ArtistDetailsProps {
 
 export default function ArtistDetails({ initialData }: ArtistDetailsProps) {
   const [selectedSong, setSelectedSong] = useState<SongWithArtist | null>(null);
+  const [selectedAlbumType, setSelectedAlbumType] = useState<Record<
+    string,
+    any
+  > | null>(null);
   const { artist, songs, albumTypes } = initialData;
 
   const handleSongSelect = (song: Song) => {
@@ -55,6 +60,10 @@ export default function ArtistDetails({ initialData }: ArtistDetailsProps) {
       ...song,
       artist: artist.artist,
     });
+  };
+
+  const handleAlbumTypeClick = (albumType: Record<string, any>) => {
+    setSelectedAlbumType(albumType);
   };
 
   const audioFeatures = [
@@ -114,11 +123,12 @@ export default function ArtistDetails({ initialData }: ArtistDetailsProps) {
           <h2 className="mb-6 text-xl font-semibold">
             Album Type Distribution
           </h2>
-          <BarChart
+          <PieChart
             data={albumTypes}
-            xKey="album_type"
-            yKey="count"
-            color="emerald"
+            nameKey="album_type"
+            dataKey="count"
+            colors={["#6366f1", "#10b981", "#ef4444", "#f59e0b", "#8b5cf6"]}
+            onClick={handleAlbumTypeClick}
           />
         </div>
       </div>
@@ -176,6 +186,15 @@ export default function ArtistDetails({ initialData }: ArtistDetailsProps) {
       </div>
 
       <SongModal song={selectedSong} onClose={() => setSelectedSong(null)} />
+      {selectedAlbumType && (
+        <DataModal
+          title={`${selectedAlbumType.album_type} Statistics`}
+          subtitle={`Details for ${selectedAlbumType.album_type} albums`}
+          data={selectedAlbumType}
+          onClose={() => setSelectedAlbumType(null)}
+          excludeKeys={["id"]}
+        />
+      )}
     </div>
   );
 }

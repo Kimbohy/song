@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { BarChart } from "@/components/charts/BarChart";
+import { PieChart } from "@/components/charts/PieChart";
 import SummaryStats from "@/components/dashboard/SummaryStats";
 import DataModal from "@/components/charts/DataModal";
 import { formatNumber } from "@/lib/utils";
@@ -55,8 +56,14 @@ export default function DashboardPage() {
   };
 
   const handleGenreClick = (itemData: any) => {
+    // Format the data object to include all metrics
+    const formattedData = {
+      "Album Type": itemData.album_type,
+      "Total Songs": itemData.count,
+    };
+
     setSelectedItem({
-      data: itemData,
+      data: formattedData,
       type: "genre",
       title: `${itemData.album_type} Stats`,
     });
@@ -141,16 +148,16 @@ export default function DashboardPage() {
           </div>
           <div className="relative">
             {data.genreStats.length > 0 ? (
-              <BarChart
-                data={data.genreStats}
-                xKey="album_type"
-                yKey="count"
-                color="emerald"
-                onClick={handleGenreClick}
+              <PieChart
+              data={data.genreStats}
+              nameKey="album_type"
+              dataKey="count"
+              colors={["#27548A", "#C95792", "#F8B55F"]}
+              onClick={handleGenreClick}
               />
             ) : (
               <div className="h-[300px] flex items-center justify-center text-gray-400">
-                No album type data available
+              No album type data available
               </div>
             )}
           </div>
