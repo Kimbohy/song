@@ -5,6 +5,7 @@ import { Music2, PlayCircle, Youtube, User2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { BarChart } from "@/components/charts/BarChart";
 import { RadarChart } from "@/components/charts/RadarChart";
+import { PieChart } from "@/components/charts/PieChart";
 import { formatNumber } from "@/lib/utils";
 import SongModal from "@/components/SongModal";
 
@@ -114,12 +115,17 @@ export default function ArtistDetails({ initialData }: ArtistDetailsProps) {
           <h2 className="mb-6 text-xl font-semibold">
             Album Type Distribution
           </h2>
-          <BarChart
-            data={albumTypes}
-            xKey="album_type"
-            yKey="count"
-            color="emerald"
+          <PieChart
+            data={albumTypes.map((type) => ({
+              name: type.album_type,
+              value: type.count,
+            }))}
+            colorScheme="chart4"
+            showLegend={true}
           />
+          <p className="text-xs text-gray-500 italic text-center mt-2">
+            Distribution of album types by count
+          </p>
         </div>
       </div>
 
