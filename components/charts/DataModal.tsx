@@ -29,30 +29,25 @@ export default function DataModal({
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
 
-      // Enhanced value formatting
+      // Check if the key contains "avg" or "average" to format as n/10
       const isAverageValue =
         key.toLowerCase().includes("avg") ||
         key.toLowerCase().includes("average");
-      const isCountValue =
-        key.toLowerCase().includes("count") ||
-        key.toLowerCase().includes("streams") ||
-        key.toLowerCase().includes("views");
 
       let formattedValue = value;
       if (typeof value === "number") {
         if (isAverageValue && value >= 0 && value <= 1) {
+          // Format average values as n/10
           formattedValue = `${(value * 10).toFixed(1)}/10`;
-        } else if (isCountValue) {
-          formattedValue = formatNumber(value);
         } else {
-          formattedValue = value.toLocaleString();
+          // Use the standard number formatting for other numbers
+          formattedValue = formatNumber(value);
         }
       }
 
       return {
         key: formattedKey,
         value: formattedValue,
-        isHighlight: isCountValue || isAverageValue,
       };
     });
 
@@ -88,16 +83,10 @@ export default function DataModal({
 
         <div className="p-6 bg-gray-50 rounded-xl">
           <div className="divide-y divide-gray-200">
-            {entries.map(({ key, value, isHighlight }) => (
+            {entries.map(({ key, value }) => (
               <div key={key} className="flex justify-between py-3">
                 <span className="text-gray-600">{key}</span>
-                <span
-                  className={`font-medium ${
-                    isHighlight ? "text-indigo-600" : "text-gray-900"
-                  }`}
-                >
-                  {value}
-                </span>
+                <span className="font-medium text-gray-900">{value}</span>
               </div>
             ))}
           </div>

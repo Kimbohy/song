@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { BarChart } from "@/components/charts/BarChart";
-import { PieChart } from "@/components/charts/PieChart";
-import { DonutChart } from "@/components/charts/DonutChart";
 import SummaryStats from "@/components/dashboard/SummaryStats";
 import DataModal from "@/components/charts/DataModal";
 import { formatNumber } from "@/lib/utils";
@@ -54,33 +52,21 @@ export default function DashboardPage() {
       type: "artist",
       title: itemData.artist,
     });
-    // You could also navigate to the artist page
-    // router.push(`/artists/${encodeURIComponent(itemData.artist)}`);
   };
 
   const handleGenreClick = (itemData: any) => {
-    // Find the original genre data from genreStats
-    const originalGenreData = data?.genreStats.find(
-      (item) => item.album_type === itemData.name
-    );
-    
     setSelectedItem({
-      data: originalGenreData || { album_type: itemData.name, count: itemData.value },
+      data: itemData,
       type: "genre",
-      title: `${itemData.name} Stats`,
+      title: `${itemData.album_type} Stats`,
     });
   };
 
   const handlePlatformClick = (itemData: any) => {
-    // Find the original platform data from platformStats
-    const originalPlatformData = data?.platformStats.find(
-      (item) => item.track === itemData.name
-    );
-    
     setSelectedItem({
-      data: originalPlatformData || { track: itemData.name, spotify_streams: itemData.value },
+      data: itemData,
       type: "platform",
-      title: itemData.name,
+      title: itemData.track,
     });
   };
 
@@ -135,7 +121,6 @@ export default function DashboardPage() {
                 yKey="total_streams"
                 horizontal
                 color="blue"
-                showLegend={true}
                 onClick={handleArtistClick}
               />
             ) : (
@@ -156,13 +141,11 @@ export default function DashboardPage() {
           </div>
           <div className="relative">
             {data.genreStats.length > 0 ? (
-              <PieChart
-                data={data.genreStats.map((stat) => ({
-                  name: stat.album_type,
-                  value: stat.count,
-                }))}
-                colorScheme="chart2"
-                showLegend={true}
+              <BarChart
+                data={data.genreStats}
+                xKey="album_type"
+                yKey="count"
+                color="emerald"
                 onClick={handleGenreClick}
               />
             ) : (
@@ -186,14 +169,12 @@ export default function DashboardPage() {
           </div>
           <div className="relative">
             {data.platformStats.length > 0 ? (
-              <DonutChart
-                data={data.platformStats.slice(0, 10).map((stat) => ({
-                  name: stat.track,
-                  value: stat.spotify_streams,
-                }))}
-                colorScheme="chart5"
+              <BarChart
+                data={data.platformStats.slice(0, 10)}
+                xKey="track"
+                yKey="spotify_streams"
+                color="green"
                 onClick={handlePlatformClick}
-                showLegend={true}
               />
             ) : (
               <div className="h-[300px] flex items-center justify-center text-gray-400">
